@@ -1,11 +1,13 @@
 :root{
   --bg:#f7f5f2; --fg:#1f2428; --muted:#5c656d; --card:#ffffff; --border:#e4dfd8; --accent:#4a5f52;
+  --image-border:#c5d0c8;
   --shadow:0 8px 24px rgba(31,36,40,.08); --radius:16px; --fast:200ms; --easing:cubic-bezier(.2,.6,.3,1);
   --warm-bg:#f0ebe4; --warm-card:#ffffff; --warm-accent:#3d4f44;
 }
 @media (prefers-color-scheme: dark){
   :root{
     --bg:#121516; --fg:#eceae6; --muted:#a3a8ad; --card:#1c2124; --border:#2e3539; --accent:#7a9a88;
+    --image-border:#4a5f57;
     --shadow:0 10px 28px rgba(0,0,0,.5);
     --warm-bg:#121516; --warm-card:#1c2124; --warm-accent:#8fb39d;
   }
@@ -41,7 +43,7 @@ header{margin-bottom:28px}
 }
 .profile-img{
   width:160px; height:160px; border-radius:12px; object-fit:cover;
-  border:2px solid var(--border); box-shadow:var(--shadow);
+  border:1px solid var(--image-border); box-shadow:var(--shadow);
   margin-top:calc(2.25rem + 6px);
 }
 
@@ -106,6 +108,16 @@ h3:not(.card h3){font-size:1.1rem; margin:28px 0 14px; letter-spacing:-.01em; fo
   cursor:pointer; transition:transform var(--fast) var(--easing), border-color var(--fast) var(--easing), box-shadow var(--fast) var(--easing);
 }
 .card:hover,.card:focus{transform:translateY(-2px); border-color:var(--warm-accent); outline:none; box-shadow:0 12px 32px rgba(74,95,82,.14)}
+.card-thumb{
+  display:flex; align-items:center; justify-content:center;
+  width:100%; height:160px; margin:0 0 4px;
+  border-radius:10px; overflow:hidden; background:var(--warm-bg);
+  border:1px solid var(--image-border);
+}
+.card-thumb img{
+  display:block; height:100%; width:auto; max-width:100%;
+  object-fit:contain;
+}
 .card h3{margin:0; font-size:1.1rem; letter-spacing:-.01em; color:inherit}
 .card-company{margin:0; font-size:0.95rem; font-weight:500; color:var(--fg)}
 .card p{margin:0; color:var(--muted)}
@@ -133,7 +145,7 @@ h3:not(.card h3){font-size:1.1rem; margin:28px 0 14px; letter-spacing:-.01em; fo
 
 .media{
   display:flex; align-items:center; gap:12px; margin:0; background:transparent; border-radius:12px;
-  padding:10px; border:1px solid var(--border);
+  padding:10px;
 }
 
 .media-content{
