@@ -193,6 +193,11 @@ h3:not(.card h3){font-size:1.1rem; margin:28px 0 14px; letter-spacing:-.01em; fo
   border-radius:10px;
   overflow:hidden;
 }
+.media-stage a.media-link{
+  display:block;
+  cursor:pointer;
+  line-height:0;
+}
 .media-stage img{
   display:block;
   width:100%;

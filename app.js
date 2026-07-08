@@ -379,6 +379,7 @@ const CONTENT = {
 const detailEl = document.getElementById("detail");
 const detailTitle = document.getElementById("detailTitle");
 const mediaImg = document.getElementById("mediaImg");
+const mediaLink = document.getElementById("mediaLink");
 const mediaCaption = document.getElementById("mediaCaption");
 const mediaCounter = document.getElementById("mediaCounter");
 const detailBody = document.getElementById("detailBody");
@@ -390,6 +391,12 @@ const emailLink = document.querySelector(".email-link");
 let active = null;
 let index = 0;
 let currentDomain = null;
+
+function updateMediaLink(m) {
+  if (!mediaLink) return;
+  mediaLink.href = m.src;
+  mediaLink.setAttribute("aria-label", `View full size: ${m.alt}`);
+}
 
 function updateMediaCounter() {
   if (!active || !mediaCounter) return;
@@ -413,6 +420,7 @@ function renderDetail(key) {
   });
   mediaImg.alt = m.alt;
   mediaCaption.innerHTML = m.caption;
+  updateMediaLink(m);
   updateMediaCounter();
 
   const preloadRemaining = () => {
@@ -498,6 +506,7 @@ function updateMedia(delta) {
   });
   mediaImg.alt = m.alt;
   mediaCaption.innerHTML = m.caption;
+  updateMediaLink(m);
   updateMediaCounter();
 }
 
