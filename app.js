@@ -543,3 +543,25 @@ nextBtn.disabled = false;
 document.querySelectorAll(".card-thumb img[data-src-full]").forEach((img) => {
   loadProgressive(img, cardTiers(img.dataset.srcFull), { finalTier: "thumb" });
 });
+
+const skillsEl = document.querySelector(".skills");
+const skillToggle = document.querySelector(".skill-toggle");
+const SKILLS_VISIBLE = 5;
+
+if (skillsEl && skillToggle) {
+  const skills = skillsEl.querySelectorAll(".skill");
+  const hiddenCount = skills.length - SKILLS_VISIBLE;
+
+  if (hiddenCount <= 0) {
+    skillToggle.hidden = true;
+    skillsEl.classList.remove("is-collapsed");
+  } else {
+    skillToggle.textContent = `+${hiddenCount} more`;
+
+    skillToggle.addEventListener("click", () => {
+      const collapsed = skillsEl.classList.toggle("is-collapsed");
+      skillToggle.setAttribute("aria-expanded", String(!collapsed));
+      skillToggle.textContent = collapsed ? `+${hiddenCount} more` : "Show less";
+    });
+  }
+}
