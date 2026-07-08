@@ -108,12 +108,15 @@
         </header>
 
         <figure class="media">
-          <button class="media-nav prev" id="prevBtn" aria-label="Previous item">&lt;</button>
-          <div class="media-content">
-            <img id="mediaImg" alt="" class="progressive-img" />
-            <figcaption id="mediaCaption"></figcaption>
+          <div class="media-viewport">
+            <div class="media-stage">
+              <img id="mediaImg" alt="" class="progressive-img" />
+            </div>
+            <button class="media-nav prev" id="prevBtn" type="button" aria-label="Previous item">&lsaquo;</button>
+            <span class="media-counter" id="mediaCounter" aria-live="polite"></span>
+            <button class="media-nav next" id="nextBtn" type="button" aria-label="Next item">&rsaquo;</button>
           </div>
-          <button class="media-nav next" id="nextBtn" aria-label="Next item">&gt;</button>
+          <figcaption id="mediaCaption"></figcaption>
         </figure>
 
         <div class="detail-body" id="detailBody"></div>

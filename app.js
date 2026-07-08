@@ -380,6 +380,7 @@ const detailEl = document.getElementById("detail");
 const detailTitle = document.getElementById("detailTitle");
 const mediaImg = document.getElementById("mediaImg");
 const mediaCaption = document.getElementById("mediaCaption");
+const mediaCounter = document.getElementById("mediaCounter");
 const detailBody = document.getElementById("detailBody");
 const prevBtn = document.getElementById("prevBtn");
 const nextBtn = document.getElementById("nextBtn");
@@ -389,6 +390,13 @@ const emailLink = document.querySelector(".email-link");
 let active = null;
 let index = 0;
 let currentDomain = null;
+
+function updateMediaCounter() {
+  if (!active || !mediaCounter) return;
+  const total = active.media.length;
+  mediaCounter.textContent = total > 1 ? `${index + 1} / ${total}` : "";
+  mediaCounter.hidden = total <= 1;
+}
 
 function renderDetail(key) {
   active = CONTENT[key];
@@ -405,6 +413,7 @@ function renderDetail(key) {
   });
   mediaImg.alt = m.alt;
   mediaCaption.innerHTML = m.caption;
+  updateMediaCounter();
 
   const preloadRemaining = () => {
     active.media.forEach((item, i) => {
@@ -425,7 +434,7 @@ function renderDetail(key) {
 
   detailBody.innerHTML = active.description.map((p) => `<p>${p}</p>`).join("");
 
-  const detailHeight = Math.max(1600, 400 + active.description.length * 40);
+  const detailHeight = Math.max(2400, 700 + active.description.length * 40);
   if (!detailEl.classList.contains("open")) {
     detailEl.style.maxHeight = "0px";
     detailEl.classList.add("open");
@@ -489,6 +498,7 @@ function updateMedia(delta) {
   });
   mediaImg.alt = m.alt;
   mediaCaption.innerHTML = m.caption;
+  updateMediaCounter();
 }
 
 document.querySelectorAll(".grid").forEach((grid) => {
