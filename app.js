@@ -1,10 +1,69 @@
 function page(n, alt, caption) {
   const id = String(n).padStart(2, "0");
+  const stem = `page-${id}`;
   return {
-    src: `img/pages/page-${id}.png`,
+    src: `img/pages/${stem}.png`,
+    lqip: `img/pages/lqip/${stem}.jpg`,
+    preview: `img/pages/preview/${stem}.webp`,
     alt: alt || `Portfolio page ${n}`,
     caption: caption || alt || `Portfolio spread, page ${n}.`,
   };
+}
+
+function cardTiers(fullSrc) {
+  const base = fullSrc.replace(/^img\/cards\//, "").replace(/\.png$/, "");
+  return {
+    lqip: `img/cards/lqip/${base}.jpg`,
+    thumb: `img/cards/thumbs/${base}.webp`,
+    full: fullSrc,
+  };
+}
+
+let mediaLoadId = 0;
+
+function preloadImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(src);
+    img.onerror = () => reject(new Error(`Failed to load ${src}`));
+    img.src = src;
+  });
+}
+
+async function loadProgressive(imgEl, tiers, { finalTier = "full" } = {}) {
+  const loadId = ++mediaLoadId;
+  const isStale = () => Number(imgEl.dataset.loadId) !== loadId;
+
+  imgEl.dataset.loadId = String(loadId);
+  imgEl.classList.add("progressive-img", "is-loading");
+
+  if (tiers.lqip) {
+    imgEl.src = tiers.lqip;
+  }
+
+  const steps = [];
+  if (finalTier === "thumb") {
+    if (tiers.thumb) steps.push(tiers.thumb);
+  } else {
+    if (tiers.preview) steps.push(tiers.preview);
+    if (tiers.full && tiers.full !== tiers.preview) steps.push(tiers.full);
+  }
+
+  for (const src of steps) {
+    if (isStale()) return;
+    try {
+      await preloadImage(src);
+      if (isStale()) return;
+      imgEl.src = src;
+      imgEl.classList.remove("is-loading");
+    } catch {
+      break;
+    }
+  }
+
+  if (!isStale()) {
+    imgEl.classList.remove("is-loading");
+  }
 }
 
 const PROJECTS = {
@@ -339,15 +398,18 @@ function renderDetail(key) {
   detailTitle.innerHTML = active.title;
 
   const m = active.media[index];
-  mediaImg.src = m.src;
+  loadProgressive(mediaImg, {
+    lqip: m.lqip,
+    preview: m.preview,
+    full: m.src,
+  });
   mediaImg.alt = m.alt;
   mediaCaption.innerHTML = m.caption;
 
   const preloadRemaining = () => {
     active.media.forEach((item, i) => {
-      if (i !== index) {
-        const img = new Image();
-        img.src = item.src;
+      if (i !== index && item.preview) {
+        preloadImage(item.preview).catch(() => {});
       }
     });
   };
@@ -420,7 +482,11 @@ function updateMedia(delta) {
   const len = active.media.length;
   index = (index + delta + len) % len;
   const m = active.media[index];
-  mediaImg.src = m.src;
+  loadProgressive(mediaImg, {
+    lqip: m.lqip,
+    preview: m.preview,
+    full: m.src,
+  });
   mediaImg.alt = m.alt;
   mediaCaption.innerHTML = m.caption;
 }
@@ -473,3 +539,7 @@ window.addEventListener("scroll", () => {
 
 prevBtn.disabled = false;
 nextBtn.disabled = false;
+
+document.querySelectorAll(".card-thumb img[data-src-full]").forEach((img) => {
+  loadProgressive(img, cardTiers(img.dataset.srcFull), { finalTier: "thumb" });
+});

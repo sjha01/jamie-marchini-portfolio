@@ -118,6 +118,13 @@ h3:not(.card h3){font-size:1.1rem; margin:28px 0 14px; letter-spacing:-.01em; fo
   display:block; height:100%; width:auto; max-width:100%;
   object-fit:contain;
 }
+
+.progressive-img{
+  transition:filter var(--fast) var(--easing), opacity var(--fast) var(--easing);
+}
+.progressive-img.is-loading{
+  filter:blur(10px);
+}
 .card h3{margin:0; font-size:1.1rem; letter-spacing:-.01em; color:inherit}
 .card-company{margin:0; font-size:0.95rem; font-weight:500; color:var(--fg)}
 .card p{margin:0; color:var(--muted)}
